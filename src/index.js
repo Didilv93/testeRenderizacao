@@ -6,7 +6,13 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App
+      baseDados={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((id) => ({
+        id: id,
+        descricao: `Descrição da linha ${id}`,
+        valor: id * 100,
+      }))}
+    />
   </React.StrictMode>,
   document.getElementById('root')
 );

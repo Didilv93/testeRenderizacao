@@ -1,49 +1,27 @@
 import { useEffect, useState } from 'react';
 import { Grid, Typography, TextField, Paper, Button } from '@material-ui/core';
 
-const baseDados = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((id) => ({
-  id: id,
-  descricao: `Descrição da linha ${id}`,
-  valor: id * 100,
-}));
-
-const App = () => {
-  const [atualizacaoHabilitada, setAtualizacaoHabilitada] = useState(false);
+const App = ({ baseDados = [] }) => {
   const [dadosPagina, setDadosPagina] = useState([]);
-  const [dadosEntrada, setDadosEntrada] = useState([]);
+
+  var eventoProgramado;
 
   useEffect(() => {
-    setDadosEntrada(
-      baseDados.map((item) => ({ id: item.id, valor: item.valor, descricao: item.descricao }))
-    );
     setDadosPagina(baseDados);
-  }, []);
+  }, [baseDados]);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setAtualizacaoHabilitada(true);
+  function salvarDados(index, novoValor) {
+    eventoProgramado = setTimeout(() => {
+      const novosDadosDeEntrada = [...dadosPagina];
+      novosDadosDeEntrada[index].valor = novoValor;
+      setDadosPagina(novosDadosDeEntrada);
+      console.log('Alterações salvas!');
     }, 500);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [dadosEntrada]);
-
-  useEffect(() => {
-    function atualizarDadosPagina() {
-      setDadosPagina(dadosEntrada);
-    }
-    console.log('trace atualizacaoHabilitada:', atualizacaoHabilitada);
-    if (atualizacaoHabilitada) {
-      atualizarDadosPagina();
-    }
-  }, [dadosEntrada, atualizacaoHabilitada, setDadosPagina]);
+  }
 
   const handleChange = (index, novoValor) => {
-    setAtualizacaoHabilitada(false);
-    const novosDadosDeEntrada = dadosEntrada;
-    novosDadosDeEntrada[index].valor = novoValor;
-    setDadosEntrada(novosDadosDeEntrada);
+    clearTimeout(eventoProgramado);
+    salvarDados(index, novoValor);
   };
 
   return (
@@ -52,7 +30,7 @@ const App = () => {
         <Button
           variant='contained'
           color='secondary'
-          onClick={() => console.log('trace dadosPagina:', dadosPagina)}
+          onClick={() => console.log('trace dadosPagina:', dadosPagina, { baseDados })}
         >
           Logar Tabela Atual
         </Button>
@@ -60,7 +38,7 @@ const App = () => {
       <Grid item>
         <Paper elevation={3} style={{ width: '600px', padding: '2rem', margin: '2rem' }}>
           <Grid container spacing={2}>
-            {/* {console.log('trace renderizando tabela com dados: ', dadosPagina)} */}
+            {console.log('trace renderizando tabela com dados: ', dadosPagina)}
             {dadosPagina.map((item, index) => (
               <Grid key={item.id} item xs={12}>
                 <Grid container spacing={2}>
