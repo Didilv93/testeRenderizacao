@@ -1,16 +1,10 @@
 import React from 'react';
 import { Grid, Typography, TextField } from '@material-ui/core';
+import { useFormikContext } from 'formik';
 
-const dadosEmpresa = ({
-  atualizarNomeEmpresa,
-  atualizarEndereco,
-  atualizarTelefone,
-  atualizarCargo,
-  nomeEmpresa,
-  endereco,
-  telefone,
-  cargo,
-}) => {
+const DadosEmpresa = () => {
+  const { values, errors, setFieldValue } = useFormikContext();
+  console.log('trace renderizou:');
   return (
     <Grid item xs={12}>
       <Grid container direction='column' spacing={2}>
@@ -22,15 +16,17 @@ const dadosEmpresa = ({
             <Grid item xs={6}>
               <TextField
                 label='Nome'
-                defaultValue={nomeEmpresa}
-                onChange={(event) => atualizarNomeEmpresa(event.target.value)}
+                error={!!errors.nomeEmpresa}
+                defaultValue={values.nomeEmpresa}
+                onChange={(event) => setFieldValue('nomeEmpresa', event.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
                 label='Cargo'
-                defaultValue={cargo}
-                onChange={(event) => atualizarCargo(event.target.value)}
+                error={!!errors.cargo}
+                defaultValue={values.cargo}
+                onChange={(event) => setFieldValue('cargo', event.target.value)}
               />
             </Grid>
           </Grid>
@@ -39,16 +35,18 @@ const dadosEmpresa = ({
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField
+                error={!!errors.enderecoEmpresa}
                 label='Endereço'
-                defaultValue={endereco}
-                onChange={(event) => atualizarEndereco(event.target.value)}
+                defaultValue={values.enderecoEmpresa}
+                onChange={(event) => setFieldValue('enderecoEmpresa', event.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
                 label='Telefone'
-                defaultValue={telefone}
-                onChange={(event) => atualizarTelefone(event.target.value)}
+                error={!!errors.telefoneEmpresa}
+                defaultValue={values.telefoneEmpresa}
+                onChange={(event) => setFieldValue('telefoneEmpresa', event.target.value)}
               />
             </Grid>
           </Grid>
@@ -58,4 +56,4 @@ const dadosEmpresa = ({
   );
 };
 
-export default dadosEmpresa;
+export default DadosEmpresa;

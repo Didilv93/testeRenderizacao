@@ -1,4 +1,5 @@
 import { Grid, Typography, Button } from '@material-ui/core';
+import { Formik } from 'formik';
 
 import { DadosPessoais, DadosEmpresa } from './Views';
 import { UseFormulario } from './Views/customHooks';
@@ -6,23 +7,10 @@ import { CascaVisualizacao } from './componentes';
 
 const App = () => {
   const {
-    atualizarTelefoneEmpresa,
-    atualizarNomeEmpresa,
+    validacoesFormulario,
     submeterFormulario,
-    atualizarEndereco,
-    atualizarTelefone,
-    enderecoEmpresa,
-    atualizarCargo,
-    telefoneEmpresa,
-    atualizarIdade,
-    atualizarNome,
-    atualizarCpf,
-    nomeEmpresa,
-    telefone,
-    cargo,
-    idade,
-    nome,
-    cpf,
+    valoresIniciais,
+    errosIniciais,
   } = UseFormulario();
 
   return (
@@ -30,39 +18,33 @@ const App = () => {
       <Grid item style={{ marginTop: '2rem' }}>
         <Typography variant='h4'>Gestão de Formulários</Typography>
       </Grid>
-      <Grid item>
-        <CascaVisualizacao>
-          <DadosPessoais
-            atualizarTelefone={atualizarTelefone}
-            atualizarIdade={atualizarIdade}
-            atualizarNome={atualizarNome}
-            atualizarCpf={atualizarCpf}
-            telefone={telefone}
-            idade={idade}
-            nome={nome}
-            cpf={cpf}
-          />
-        </CascaVisualizacao>
-      </Grid>
-      <Grid item>
-        <CascaVisualizacao>
-          <DadosEmpresa
-            atualizarTelefone={atualizarTelefoneEmpresa}
-            atualizarEndereco={atualizarEndereco}
-            atualizarNomeEmpresa={atualizarNomeEmpresa}
-            atualizarCargo={atualizarCargo}
-            nomeEmpresa={nomeEmpresa}
-            telefone={telefoneEmpresa}
-            endereco={enderecoEmpresa}
-            cargo={cargo}
-          />
-        </CascaVisualizacao>
-      </Grid>
-      <Grid item>
-        <Button variant='outlined' onClick={submeterFormulario}>
-          Enviar
-        </Button>
-      </Grid>
+      <Formik
+        onSubmit={(dados) => submeterFormulario(dados)}
+        validationSchema={validacoesFormulario}
+        initialErrors={errosIniciais}
+        initialValues={valoresIniciais}
+        enableReinitialize
+      >
+        {({ handleSubmit }) => (
+          <>
+            <Grid item>
+              <CascaVisualizacao>
+                <DadosPessoais />
+              </CascaVisualizacao>
+            </Grid>
+            <Grid item>
+              <CascaVisualizacao>
+                <DadosEmpresa />
+              </CascaVisualizacao>
+            </Grid>
+            <Grid item>
+              <Button variant='outlined' onClick={handleSubmit}>
+                Enviar
+              </Button>
+            </Grid>
+          </>
+        )}
+      </Formik>
     </Grid>
   );
 };

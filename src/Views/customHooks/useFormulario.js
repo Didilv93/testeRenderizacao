@@ -1,59 +1,57 @@
-import { useState } from 'react';
+import * as Yup from 'yup';
 
 const useFormulario = () => {
-  const [telefone, atualizarTelefone] = useState('');
-  const [idade, atualizarIdade] = useState('');
-  const [nome, atualizarNome] = useState('');
-  const [cpf, atualizarCpf] = useState('');
+  const validacoesFormulario = Yup.object().shape({
+    telefone: Yup.string().required('Campo obrigatório'),
+    idade: Yup.mixed().test(
+      'number',
+      'Campo inválido',
+      (valor) => valor && valor.toString().length <= 3
+    ),
+    nome: Yup.string().required('Campo obrigatório'),
+    cpf: Yup.string().required('Campo obrigatório'),
+    telefoneEmpresa: Yup.string().required('Campo obrigatório'),
+    enderecoEmpresa: Yup.string().required('Campo obrigatório'),
+    nomeEmpresa: Yup.string().required('Campo obrigatório'),
+    cargo: Yup.string().required('Campo obrigatório'),
+  });
 
-  const [telefoneEmpresa, atualizarTelefoneEmpresa] = useState('');
-  const [enderecoEmpresa, atualizarEndereco] = useState('');
-  const [nomeEmpresa, atualizarNomeEmpresa] = useState('');
-  const [cargo, atualizarCargo] = useState('');
+  const errosIniciais = {
+    telefone: '',
+    idade: '',
+    nome: '',
+    cpf: '',
+    telefoneEmpresa: '',
+    enderecoEmpresa: '',
+    nomeEmpresa: '',
+    cargo: '',
+  };
 
-  const submeterFormulario = () => {
-    if (
-      enderecoEmpresa &&
-      telefoneEmpresa &&
-      nomeEmpresa &&
-      telefone &&
-      cargo &&
-      idade &&
-      nome &&
-      cpf
-    ) {
+  const valoresIniciais = {
+    telefone: '3199444848',
+    idade: '',
+    nome: 'Teste Formulário',
+    cpf: '',
+    telefoneEmpresa: '',
+    enderecoEmpresa: '',
+    nomeEmpresa: '',
+    cargo: '',
+  };
+
+  const submeterFormulario = (dados) => {
+    if (!!dados) {
       console.log('trace dados formulário:', {
-        enderecoEmpresa,
-        telefoneEmpresa,
-        nomeEmpresa,
-        telefone,
-        cargo,
-        idade,
-        nome,
-        cpf,
+        dados,
       });
       alert('Formulário enviado');
     } else alert('Formulário inválido');
   };
 
   return {
-    atualizarTelefoneEmpresa,
+    validacoesFormulario,
     submeterFormulario,
-    atualizarNomeEmpresa,
-    atualizarEndereco,
-    atualizarTelefone,
-    enderecoEmpresa,
-    atualizarCargo,
-    telefoneEmpresa,
-    atualizarIdade,
-    atualizarNome,
-    atualizarCpf,
-    nomeEmpresa,
-    telefone,
-    cargo,
-    idade,
-    nome,
-    cpf,
+    valoresIniciais,
+    errosIniciais,
   };
 };
 
