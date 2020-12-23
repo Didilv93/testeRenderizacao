@@ -1,65 +1,67 @@
-import { useEffect, useState } from 'react';
-import { Grid, Typography, TextField, Paper, Button } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 
-const App = ({ baseDados = [] }) => {
-  const [dadosPagina, setDadosPagina] = useState([]);
+import { DadosPessoais, DadosEmpresa } from './Views';
+import { UseFormulario } from './Views/customHooks';
+import { CascaVisualizacao } from './componentes';
 
-  var eventoProgramado;
-
-  useEffect(() => {
-    setDadosPagina(baseDados);
-  }, [baseDados]);
-
-  function salvarDados(index, novoValor) {
-    eventoProgramado = setTimeout(() => {
-      const novosDadosDeEntrada = [...dadosPagina];
-      novosDadosDeEntrada[index].valor = novoValor;
-      setDadosPagina(novosDadosDeEntrada);
-      console.log('Alterações salvas!');
-    }, 500);
-  }
-
-  const handleChange = (index, novoValor) => {
-    clearTimeout(eventoProgramado);
-    salvarDados(index, novoValor);
-  };
+const App = () => {
+  const {
+    atualizarTelefoneEmpresa,
+    atualizarNomeEmpresa,
+    submeterFormulario,
+    atualizarEndereco,
+    atualizarTelefone,
+    enderecoEmpresa,
+    atualizarCargo,
+    telefoneEmpresa,
+    atualizarIdade,
+    atualizarNome,
+    atualizarCpf,
+    nomeEmpresa,
+    telefone,
+    cargo,
+    idade,
+    nome,
+    cpf,
+  } = UseFormulario();
 
   return (
-    <Grid container direction='column' alignItems='center'>
-      <Grid item xs={4} style={{ marginTop: '2rem' }}>
-        <Button
-          variant='contained'
-          color='secondary'
-          onClick={() => console.log('trace dadosPagina:', dadosPagina, { baseDados })}
-        >
-          Logar Tabela Atual
-        </Button>
+    <Grid container direction='column' alignItems='center' spacing={3}>
+      <Grid item style={{ marginTop: '2rem' }}>
+        <Typography variant='h4'>Gestão de Formulários</Typography>
       </Grid>
       <Grid item>
-        <Paper elevation={3} style={{ width: '600px', padding: '2rem', margin: '2rem' }}>
-          <Grid container spacing={2}>
-            {console.log('trace renderizando tabela com dados: ', dadosPagina)}
-            {dadosPagina.map((item, index) => (
-              <Grid key={item.id} item xs={12}>
-                <Grid container spacing={2}>
-                  <Grid item xs={2}>
-                    <Typography>{item.id}</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography>{item.descricao}</Typography>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <TextField
-                      label='Valor'
-                      defaultValue={item.valor}
-                      onChange={(event) => handleChange(index, event.target.value)}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-            ))}
-          </Grid>
-        </Paper>
+        <CascaVisualizacao>
+          <DadosPessoais
+            atualizarTelefone={atualizarTelefone}
+            atualizarIdade={atualizarIdade}
+            atualizarNome={atualizarNome}
+            atualizarCpf={atualizarCpf}
+            telefone={telefone}
+            idade={idade}
+            nome={nome}
+            cpf={cpf}
+          />
+        </CascaVisualizacao>
+      </Grid>
+      <Grid item>
+        <CascaVisualizacao>
+          <DadosEmpresa
+            atualizarTelefone={atualizarTelefoneEmpresa}
+            atualizarEndereco={atualizarEndereco}
+            atualizarNomeEmpresa={atualizarNomeEmpresa}
+            atualizarCargo={atualizarCargo}
+            nomeEmpresa={nomeEmpresa}
+            telefone={telefoneEmpresa}
+            endereco={enderecoEmpresa}
+            cargo={cargo}
+          />
+        </CascaVisualizacao>
+      </Grid>
+      <Grid item>
+        <Button variant='outlined' onClick={submeterFormulario}>
+          Enviar
+        </Button>
       </Grid>
     </Grid>
   );
