@@ -12,17 +12,28 @@ const useFormulario = () => {
   const [cargo, atualizarCargo] = useState('');
 
   const submeterFormulario = () => {
-    console.log('trace dados formulário:', {
-      enderecoEmpresa,
-      telefoneEmpresa,
-      nomeEmpresa,
-      telefone,
-      cargo,
-      idade,
-      nome,
-      cpf,
-    });
-    alert('Formulário enviado');
+    if (
+      enderecoEmpresa &&
+      telefoneEmpresa &&
+      nomeEmpresa &&
+      telefone &&
+      cargo &&
+      idade &&
+      nome &&
+      cpf
+    ) {
+      console.log('trace dados formulário:', {
+        enderecoEmpresa,
+        telefoneEmpresa,
+        nomeEmpresa,
+        telefone,
+        cargo,
+        idade,
+        nome,
+        cpf,
+      });
+      alert('Formulário enviado');
+    } else alert('Formulário inválido');
   };
 
   return {
